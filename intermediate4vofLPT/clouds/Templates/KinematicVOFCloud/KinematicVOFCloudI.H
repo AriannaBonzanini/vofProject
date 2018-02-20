@@ -29,15 +29,15 @@ License
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class CloudType>
-inline const Foam::KinematicCloud<CloudType>&
-Foam::KinematicCloud<CloudType>::cloudCopy() const
+inline const Foam::KinematicVOFCloud<CloudType>&
+Foam::KinematicVOFCloud<CloudType>::cloudCopy() const
 {
     return cloudCopyPtr_();
 }
 
 
 template<class CloudType>
-inline const Foam::fvMesh& Foam::KinematicCloud<CloudType>::mesh() const
+inline const Foam::fvMesh& Foam::KinematicVOFCloud<CloudType>::mesh() const
 {
     return mesh_;
 }
@@ -45,7 +45,7 @@ inline const Foam::fvMesh& Foam::KinematicCloud<CloudType>::mesh() const
 
 template<class CloudType>
 inline const Foam::IOdictionary&
-Foam::KinematicCloud<CloudType>::particleProperties() const
+Foam::KinematicVOFCloud<CloudType>::particleProperties() const
 {
     return particleProperties_;
 }
@@ -53,14 +53,14 @@ Foam::KinematicCloud<CloudType>::particleProperties() const
 
 template<class CloudType>
 inline const Foam::IOdictionary&
-Foam::KinematicCloud<CloudType>::outputProperties() const
+Foam::KinematicVOFCloud<CloudType>::outputProperties() const
 {
     return outputProperties_;
 }
 
 
 template<class CloudType>
-inline Foam::IOdictionary& Foam::KinematicCloud<CloudType>::outputProperties()
+inline Foam::IOdictionary& Foam::KinematicVOFCloud<CloudType>::outputProperties()
 {
     return outputProperties_;
 }
@@ -68,14 +68,14 @@ inline Foam::IOdictionary& Foam::KinematicCloud<CloudType>::outputProperties()
 
 template<class CloudType>
 inline const Foam::cloudSolution&
-Foam::KinematicCloud<CloudType>::solution() const
+Foam::KinematicVOFCloud<CloudType>::solution() const
 {
     return solution_;
 }
 
 
 template<class CloudType>
-inline Foam::cloudSolution& Foam::KinematicCloud<CloudType>::solution()
+inline Foam::cloudSolution& Foam::KinematicVOFCloud<CloudType>::solution()
 {
     return solution_;
 }
@@ -83,7 +83,7 @@ inline Foam::cloudSolution& Foam::KinematicCloud<CloudType>::solution()
 
 template<class CloudType>
 inline const typename CloudType::particleType::constantProperties&
-Foam::KinematicCloud<CloudType>::constProps() const
+Foam::KinematicVOFCloud<CloudType>::constProps() const
 {
     return constProps_;
 }
@@ -91,7 +91,7 @@ Foam::KinematicCloud<CloudType>::constProps() const
 
 template<class CloudType>
 inline typename CloudType::particleType::constantProperties&
-Foam::KinematicCloud<CloudType>::constProps()
+Foam::KinematicVOFCloud<CloudType>::constProps()
 {
     return constProps_;
 }
@@ -99,49 +99,49 @@ Foam::KinematicCloud<CloudType>::constProps()
 
 template<class CloudType>
 inline const Foam::dictionary&
-Foam::KinematicCloud<CloudType>::subModelProperties() const
+Foam::KinematicVOFCloud<CloudType>::subModelProperties() const
 {
     return subModelProperties_;
 }
 
 
 template<class CloudType>
-inline const Foam::volScalarField& Foam::KinematicCloud<CloudType>::rho() const
+inline const Foam::volScalarField& Foam::KinematicVOFCloud<CloudType>::rho() const
 {
     return rho_;
 }
 
 
 template<class CloudType>
-inline const Foam::volVectorField& Foam::KinematicCloud<CloudType>::U() const
+inline const Foam::volVectorField& Foam::KinematicVOFCloud<CloudType>::U() const
 {
     return U_;
 }
 
 
 template<class CloudType>
-inline const Foam::volScalarField& Foam::KinematicCloud<CloudType>::mu() const
+inline const Foam::volScalarField& Foam::KinematicVOFCloud<CloudType>::mu() const
 {
     return mu_;
 }
 
 
 template<class CloudType>
-inline const Foam::dimensionedVector& Foam::KinematicCloud<CloudType>::g() const
+inline const Foam::dimensionedVector& Foam::KinematicVOFCloud<CloudType>::g() const
 {
     return g_;
 }
 
 
 template<class CloudType>
-inline Foam::scalar Foam::KinematicCloud<CloudType>::pAmbient() const
+inline Foam::scalar Foam::KinematicVOFCloud<CloudType>::pAmbient() const
 {
     return pAmbient_;
 }
 
 
 template<class CloudType>
-inline Foam::scalar& Foam::KinematicCloud<CloudType>::pAmbient()
+inline Foam::scalar& Foam::KinematicVOFCloud<CloudType>::pAmbient()
 {
     return pAmbient_;
 }
@@ -149,104 +149,104 @@ inline Foam::scalar& Foam::KinematicCloud<CloudType>::pAmbient()
 
 template<class CloudType>
 //inline const typename CloudType::parcelType::forceType&
-inline const typename Foam::KinematicCloud<CloudType>::forceType&
-Foam::KinematicCloud<CloudType>::forces() const
+inline const typename Foam::KinematicVOFCloud<CloudType>::forceType&
+Foam::KinematicVOFCloud<CloudType>::forces() const
 {
     return forces_;
 }
 
 
 template<class CloudType>
-inline typename Foam::KinematicCloud<CloudType>::forceType&
-Foam::KinematicCloud<CloudType>::forces()
+inline typename Foam::KinematicVOFCloud<CloudType>::forceType&
+Foam::KinematicVOFCloud<CloudType>::forces()
 {
     return forces_;
 }
 
 
 template<class CloudType>
-inline typename Foam::KinematicCloud<CloudType>::functionType&
-Foam::KinematicCloud<CloudType>::functions()
+inline typename Foam::KinematicVOFCloud<CloudType>::functionType&
+Foam::KinematicVOFCloud<CloudType>::functions()
 {
     return functions_;
 }
 
 
 template<class CloudType>
-inline const Foam::InjectionModelList<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::injectors() const
+inline const Foam::InjectionModelList<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::injectors() const
 {
     return injectors_;
 }
 
 
 template<class CloudType>
-inline Foam::InjectionModelList<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::injectors()
+inline Foam::InjectionModelList<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::injectors()
 {
     return injectors_;
 }
 
 
 template<class CloudType>
-inline const Foam::DispersionModel<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::dispersion() const
+inline const Foam::DispersionModel<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::dispersion() const
 {
     return dispersionModel_;
 }
 
 
 template<class CloudType>
-inline Foam::DispersionModel<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::dispersion()
+inline Foam::DispersionModel<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::dispersion()
 {
     return dispersionModel_();
 }
 
 
 template<class CloudType>
-inline const Foam::PatchInteractionModel<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::patchInteraction() const
+inline const Foam::PatchInteractionModel<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::patchInteraction() const
 {
     return patchInteractionModel_;
 }
 
 
 template<class CloudType>
-inline Foam::PatchInteractionModel<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::patchInteraction()
+inline Foam::PatchInteractionModel<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::patchInteraction()
 {
     return patchInteractionModel_();
 }
 
 
 template<class CloudType>
-inline const Foam::StochasticCollisionModel<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::stochasticCollision() const
+inline const Foam::StochasticCollisionModel<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::stochasticCollision() const
 {
     return stochasticCollisionModel_();
 }
 
 
 template<class CloudType>
-inline Foam::StochasticCollisionModel<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::stochasticCollision()
+inline Foam::StochasticCollisionModel<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::stochasticCollision()
 {
     return stochasticCollisionModel_();
 }
 
 
 template<class CloudType>
-inline const Foam::SurfaceFilmModel<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::surfaceFilm() const
+inline const Foam::SurfaceFilmModel<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::surfaceFilm() const
 {
     return surfaceFilmModel_();
 }
 
 
 template<class CloudType>
-inline Foam::SurfaceFilmModel<Foam::KinematicCloud<CloudType>>&
-Foam::KinematicCloud<CloudType>::surfaceFilm()
+inline Foam::SurfaceFilmModel<Foam::KinematicVOFCloud<CloudType>>&
+Foam::KinematicVOFCloud<CloudType>::surfaceFilm()
 {
     return surfaceFilmModel_();
 }
@@ -254,24 +254,24 @@ Foam::KinematicCloud<CloudType>::surfaceFilm()
 
 template<class CloudType>
 inline const Foam::vectorIntegrationScheme&
-Foam::KinematicCloud<CloudType>::UIntegrator() const
+Foam::KinematicVOFCloud<CloudType>::UIntegrator() const
 {
     return UIntegrator_;
 }
 
 
 template<class CloudType>
-inline Foam::label Foam::KinematicCloud<CloudType>::nParcels() const
+inline Foam::label Foam::KinematicVOFCloud<CloudType>::nParcels() const
 {
     return this->size();
 }
 
 
 template<class CloudType>
-inline Foam::scalar Foam::KinematicCloud<CloudType>::massInSystem() const
+inline Foam::scalar Foam::KinematicVOFCloud<CloudType>::massInSystem() const
 {
     scalar sysMass = 0.0;
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
          const parcelType& p = iter();
          sysMass += p.nParticle()*p.mass();
@@ -283,11 +283,11 @@ inline Foam::scalar Foam::KinematicCloud<CloudType>::massInSystem() const
 
 template<class CloudType>
 inline Foam::vector
-Foam::KinematicCloud<CloudType>::linearMomentumOfSystem() const
+Foam::KinematicVOFCloud<CloudType>::linearMomentumOfSystem() const
 {
     vector linearMomentum(Zero);
 
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         const parcelType& p = iter();
 
@@ -300,11 +300,11 @@ Foam::KinematicCloud<CloudType>::linearMomentumOfSystem() const
 
 template<class CloudType>
 inline Foam::scalar
-Foam::KinematicCloud<CloudType>::linearKineticEnergyOfSystem() const
+Foam::KinematicVOFCloud<CloudType>::linearKineticEnergyOfSystem() const
 {
     scalar linearKineticEnergy = 0.0;
 
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         const parcelType& p = iter();
 
@@ -316,7 +316,7 @@ Foam::KinematicCloud<CloudType>::linearKineticEnergyOfSystem() const
 
 
 template<class CloudType>
-inline Foam::scalar Foam::KinematicCloud<CloudType>::Dij
+inline Foam::scalar Foam::KinematicVOFCloud<CloudType>::Dij
 (
     const label i,
     const label j
@@ -324,7 +324,7 @@ inline Foam::scalar Foam::KinematicCloud<CloudType>::Dij
 {
     scalar si = 0.0;
     scalar sj = 0.0;
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         const parcelType& p = iter();
         si += p.nParticle()*pow(p.d(), i);
@@ -340,10 +340,10 @@ inline Foam::scalar Foam::KinematicCloud<CloudType>::Dij
 
 
 template<class CloudType>
-inline Foam::scalar Foam::KinematicCloud<CloudType>::Dmax() const
+inline Foam::scalar Foam::KinematicVOFCloud<CloudType>::Dmax() const
 {
     scalar d = -GREAT;
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         const parcelType& p = iter();
         d = max(d, p.d());
@@ -356,7 +356,7 @@ inline Foam::scalar Foam::KinematicCloud<CloudType>::Dmax() const
 
 
 template<class CloudType>
-inline Foam::cachedRandom& Foam::KinematicCloud<CloudType>::rndGen()
+inline Foam::cachedRandom& Foam::KinematicVOFCloud<CloudType>::rndGen()
 {
     return rndGen_;
 }
@@ -364,7 +364,7 @@ inline Foam::cachedRandom& Foam::KinematicCloud<CloudType>::rndGen()
 
 template<class CloudType>
 inline Foam::List<Foam::DynamicList<typename CloudType::particleType*>>&
-Foam::KinematicCloud<CloudType>::cellOccupancy()
+Foam::KinematicVOFCloud<CloudType>::cellOccupancy()
 {
     if (cellOccupancyPtr_.empty())
     {
@@ -377,7 +377,7 @@ Foam::KinematicCloud<CloudType>::cellOccupancy()
 
 template<class CloudType>
 inline const Foam::scalarField&
-Foam::KinematicCloud<CloudType>::cellLengthScale() const
+Foam::KinematicVOFCloud<CloudType>::cellLengthScale() const
 {
     return cellLengthScale_;
 }
@@ -385,7 +385,7 @@ Foam::KinematicCloud<CloudType>::cellLengthScale() const
 
 template<class CloudType>
 inline Foam::DimensionedField<Foam::vector, Foam::volMesh>&
-Foam::KinematicCloud<CloudType>::UTrans()
+Foam::KinematicVOFCloud<CloudType>::UTrans()
 {
     return UTrans_();
 }
@@ -393,7 +393,7 @@ Foam::KinematicCloud<CloudType>::UTrans()
 
 template<class CloudType>
 inline const Foam::DimensionedField<Foam::vector, Foam::volMesh>&
-Foam::KinematicCloud<CloudType>::UTrans() const
+Foam::KinematicVOFCloud<CloudType>::UTrans() const
 {
     return UTrans_();
 }
@@ -401,7 +401,7 @@ Foam::KinematicCloud<CloudType>::UTrans() const
 
 template<class CloudType>
 inline Foam::DimensionedField<Foam::scalar, Foam::volMesh>&
-Foam::KinematicCloud<CloudType>::UCoeff()
+Foam::KinematicVOFCloud<CloudType>::UCoeff()
 {
     return UCoeff_();
 }
@@ -409,7 +409,7 @@ Foam::KinematicCloud<CloudType>::UCoeff()
 
 template<class CloudType>
 inline const Foam::DimensionedField<Foam::scalar, Foam::volMesh>&
-Foam::KinematicCloud<CloudType>::UCoeff() const
+Foam::KinematicVOFCloud<CloudType>::UCoeff() const
 {
     return UCoeff_();
 }
@@ -417,7 +417,7 @@ Foam::KinematicCloud<CloudType>::UCoeff() const
 
 template<class CloudType>
 inline Foam::tmp<Foam::fvVectorMatrix>
-Foam::KinematicCloud<CloudType>::SU(volVectorField& U) const
+Foam::KinematicVOFCloud<CloudType>::SU(volVectorField& U) const
 {
     if (debug)
     {
@@ -453,7 +453,7 @@ Foam::KinematicCloud<CloudType>::SU(volVectorField& U) const
 
 template<class CloudType>
 inline const Foam::tmp<Foam::volScalarField>
-Foam::KinematicCloud<CloudType>::vDotSweep() const
+Foam::KinematicVOFCloud<CloudType>::vDotSweep() const
 {
     tmp<volScalarField> tvDotSweep
     (
@@ -475,7 +475,7 @@ Foam::KinematicCloud<CloudType>::vDotSweep() const
     );
 
     volScalarField& vDotSweep = tvDotSweep.ref();
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         const parcelType& p = iter();
         const label celli = p.cell();
@@ -492,7 +492,7 @@ Foam::KinematicCloud<CloudType>::vDotSweep() const
 
 template<class CloudType>
 inline const Foam::tmp<Foam::volScalarField>
-Foam::KinematicCloud<CloudType>::theta() const
+Foam::KinematicVOFCloud<CloudType>::theta() const
 {
     tmp<volScalarField> ttheta
     (
@@ -514,7 +514,7 @@ Foam::KinematicCloud<CloudType>::theta() const
     );
 
     volScalarField& theta = ttheta.ref();
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         const parcelType& p = iter();
         const label celli = p.cell();
@@ -530,7 +530,7 @@ Foam::KinematicCloud<CloudType>::theta() const
 
 template<class CloudType>
 inline const Foam::tmp<Foam::volScalarField>
-Foam::KinematicCloud<CloudType>::thetaDelete() const
+Foam::KinematicVOFCloud<CloudType>::thetaDelete() const
 {
     tmp<volScalarField> tthetaDelete
     (
@@ -552,12 +552,12 @@ Foam::KinematicCloud<CloudType>::thetaDelete() const
     );
 
     volScalarField& thetaDelete = tthetaDelete.ref();
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         const parcelType& p = iter();
         const label celli = p.cell();
 
-	if(!p.active())
+	if(p.active() == false)
 	        thetaDelete[celli] += p.nParticle()*p.volume();
     }
 
@@ -571,7 +571,7 @@ Foam::KinematicCloud<CloudType>::thetaDelete() const
 
 template<class CloudType>
 inline const Foam::tmp<Foam::volScalarField>
-Foam::KinematicCloud<CloudType>::alpha() const
+Foam::KinematicVOFCloud<CloudType>::alpha() const
 {
     tmp<volScalarField> talpha
     (
@@ -592,7 +592,7 @@ Foam::KinematicCloud<CloudType>::alpha() const
     );
 
     scalarField& alpha = talpha.ref().primitiveFieldRef();
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         const parcelType& p = iter();
         const label celli = p.cell();
@@ -608,7 +608,7 @@ Foam::KinematicCloud<CloudType>::alpha() const
 
 template<class CloudType>
 inline const Foam::tmp<Foam::volScalarField>
-Foam::KinematicCloud<CloudType>::rhoEff() const
+Foam::KinematicVOFCloud<CloudType>::rhoEff() const
 {
     tmp<volScalarField> trhoEff
     (
@@ -629,7 +629,7 @@ Foam::KinematicCloud<CloudType>::rhoEff() const
     );
 
     scalarField& rhoEff = trhoEff.ref().primitiveFieldRef();
-    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllConstIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         const parcelType& p = iter();
         const label celli = p.cell();

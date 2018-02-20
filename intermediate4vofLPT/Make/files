@@ -14,10 +14,12 @@ $(BASECLOUDS)/reactingCloud/reactingCloud.C
 $(BASECLOUDS)/reactingMultiphaseCloud/reactingMultiphaseCloud.C
 
 
-/* kinematic parcel sub-models */
-KINEMATICPARCEL=$(DERIVEDPARCELS)/basicKinematicParcel
-$(KINEMATICPARCEL)/defineBasicKinematicParcel.C
-$(KINEMATICPARCEL)/makeBasicKinematicParcelSubmodels.C
+
+
+/* kinematic parcel VOF sub-models */
+KINEMATICVOFPARCEL=$(DERIVEDPARCELS)/basicKinematicVOFParcel
+$(KINEMATICVOFPARCEL)/defineBasicKinematicVOFParcel.C
+$(KINEMATICVOFPARCEL)/makeBasicKinematicVOFParcelSubmodels.C
 
 
 /* kinematic colliding parcel sub-models */
@@ -116,4 +118,4 @@ clouds/Templates/KinematicCloud/cloudSolution/cloudSolution.C
 submodels/MPPIC/AveragingMethods/makeAveragingMethods.C
 
 
-LIB = $(FOAM_LIBBIN)/liblagrangianIntermediate
+LIB = $(FOAM_USER_LIBBIN)/liblagrangianIntermediate4vofLPT

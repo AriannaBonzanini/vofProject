@@ -33,6 +33,7 @@ License
 #include "ParticleErosion.H"
 #include "ParticleTracks.H"
 #include "ParticleTrap.H"
+#include "ParticleRemoval.H"
 #include "PatchPostProcessing.H"
 #include "VoidFraction.H"
 
@@ -47,6 +48,7 @@ License
     makeCloudFunctionObjectType(ParticleErosion, CloudType);                   \
     makeCloudFunctionObjectType(ParticleTracks, CloudType);                    \
     makeCloudFunctionObjectType(ParticleTrap, CloudType);                      \
+    makeCloudFunctionObjectType(ParticleRemoval, CloudType);                   \
     makeCloudFunctionObjectType(PatchPostProcessing, CloudType);               \
     makeCloudFunctionObjectType(VoidFraction, CloudType);
 

@@ -122,6 +122,22 @@ void Foam::CloudFunctionObjectList<CloudType>::preEvolve()
     }
 }
 
+template<class CloudType>
+void Foam::CloudFunctionObjectList<CloudType>::preEvolveParticleRemoval
+(
+    typename CloudType::parcelType& p,
+    const label celli,
+    const scalar dt,
+    const point& position0,
+    bool& keepParticle
+)
+{
+    forAll(*this, i)
+    {
+        this->operator[](i).preEvolveParticleRemoval(p, celli, dt, position0, keepParticle);
+    }
+}
+
 
 template<class CloudType>
 void Foam::CloudFunctionObjectList<CloudType>::postEvolve()

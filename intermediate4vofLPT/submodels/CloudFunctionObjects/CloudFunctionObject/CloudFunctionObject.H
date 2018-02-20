@@ -141,6 +141,15 @@ public:
             //- Pre-evolve hook
             virtual void preEvolve();
 
+            virtual void preEvolveParticleRemoval
+			(
+                typename CloudType::parcelType& p,
+                const label celli,
+                const scalar dt,
+                const point& position0,
+                bool& keepParticle
+			);
+
             //- Post-evolve hook
             virtual void postEvolve();
 

@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 \*---------------------------------------------------------------------------*/
-#include "basicKinematicCloud.H"
+#include "basicKinematicVOFCloud.H"
 
 #include "makeParcelCloudFunctionObjects.H"
 
@@ -36,15 +36,15 @@ License
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-makeParcelCloudFunctionObjects(basicKinematicCloud);
+makeParcelCloudFunctionObjects(basicKinematicVOFCloud);
 
 // Kinematic sub-models
-makeParcelForces(basicKinematicCloud);
-makeParcelDispersionModels(basicKinematicCloud);
-makeParcelInjectionModels(basicKinematicCloud);
-makeParcelPatchInteractionModels(basicKinematicCloud);
-makeParcelStochasticCollisionModels(basicKinematicCloud);
-makeParcelSurfaceFilmModels(basicKinematicCloud);
+makeParcelForces(basicKinematicVOFCloud);
+makeParcelDispersionModels(basicKinematicVOFCloud);
+makeParcelInjectionModels(basicKinematicVOFCloud);
+makeParcelPatchInteractionModels(basicKinematicVOFCloud);
+makeParcelStochasticCollisionModels(basicKinematicVOFCloud);
+makeParcelSurfaceFilmModels(basicKinematicVOFCloud);
 
 
 

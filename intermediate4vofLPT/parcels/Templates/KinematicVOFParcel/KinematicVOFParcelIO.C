@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "KinematicParcel.H"
+#include "KinematicVOFParcel.H"
 #include "IOstreams.H"
 #include "IOField.H"
 #include "Cloud.H"
@@ -31,21 +31,21 @@ License
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
 template<class ParcelType>
-Foam::string Foam::KinematicParcel<ParcelType>::propertyList_ =
-    Foam::KinematicParcel<ParcelType>::propertyList();
+Foam::string Foam::KinematicVOFParcel<ParcelType>::propertyList_ =
+    Foam::KinematicVOFParcel<ParcelType>::propertyList();
 
 template<class ParcelType>
-const std::size_t Foam::KinematicParcel<ParcelType>::sizeofFields_
+const std::size_t Foam::KinematicVOFParcel<ParcelType>::sizeofFields_
 (
-    offsetof(KinematicParcel<ParcelType>, rhoc_)
-  - offsetof(KinematicParcel<ParcelType>, active_)
+    offsetof(KinematicVOFParcel<ParcelType>, rhoc_)
+  - offsetof(KinematicVOFParcel<ParcelType>, active_)
 );
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class ParcelType>
-Foam::KinematicParcel<ParcelType>::KinematicParcel
+Foam::KinematicVOFParcel<ParcelType>::KinematicVOFParcel
 (
     const polyMesh& mesh,
     Istream& is,
@@ -56,7 +56,6 @@ Foam::KinematicParcel<ParcelType>::KinematicParcel
     active_(false),
     typeId_(0),
     nParticle_(0.0),
-    deletedParticle_(0.0),
     d_(0.0),
     dTarget_(0.0),
     U_(Zero),
@@ -75,7 +74,6 @@ Foam::KinematicParcel<ParcelType>::KinematicParcel
             active_ = readBool(is);
             typeId_ = readLabel(is);
             nParticle_ = readScalar(is);
-            deletedParticle_ = readScalar(is);
             d_ = readScalar(is);
             dTarget_ = readScalar(is);
             is >> U_;
@@ -93,7 +91,7 @@ Foam::KinematicParcel<ParcelType>::KinematicParcel
     // Check state of Istream
     is.check
     (
-        "KinematicParcel<ParcelType>::KinematicParcel"
+        "KinematicVOFParcel<ParcelType>::KinematicVOFParcel"
         "(const polyMesh&, Istream&, bool)"
     );
 }
@@ -101,7 +99,7 @@ Foam::KinematicParcel<ParcelType>::KinematicParcel
 
 template<class ParcelType>
 template<class CloudType>
-void Foam::KinematicParcel<ParcelType>::readFields(CloudType& c)
+void Foam::KinematicVOFParcel<ParcelType>::readFields(CloudType& c)
 {
     if (!c.size())
     {
@@ -119,10 +117,6 @@ void Foam::KinematicParcel<ParcelType>::readFields(CloudType& c)
     IOField<scalar>
         nParticle(c.fieldIOobject("nParticle", IOobject::MUST_READ));
     c.checkFieldIOobject(c, nParticle);
-
-    IOField<scalar>
-        deletedParticle(c.fieldIOobject("deletedParticle", IOobject::MUST_READ));
-    c.checkFieldIOobject(c, deletedParticle);
 
     IOField<scalar> d(c.fieldIOobject("d", IOobject::MUST_READ));
     c.checkFieldIOobject(c, d);
@@ -149,12 +143,11 @@ void Foam::KinematicParcel<ParcelType>::readFields(CloudType& c)
 
     forAllIter(typename CloudType, c, iter)
     {
-        KinematicParcel<ParcelType>& p = iter();
+        KinematicVOFParcel<ParcelType>& p = iter();
 
         p.active_ = active[i];
         p.typeId_ = typeId[i];
         p.nParticle_ = nParticle[i];
-        p.deletedParticle_ = deletedParticle[i];
         p.d_ = d[i];
         p.dTarget_ = dTarget[i];
         p.U_ = U[i];
@@ -170,7 +163,7 @@ void Foam::KinematicParcel<ParcelType>::readFields(CloudType& c)
 
 template<class ParcelType>
 template<class CloudType>
-void Foam::KinematicParcel<ParcelType>::writeFields(const CloudType& c)
+void Foam::KinematicVOFParcel<ParcelType>::writeFields(const CloudType& c)
 {
     ParcelType::writeFields(c);
 
@@ -181,11 +174,6 @@ void Foam::KinematicParcel<ParcelType>::writeFields(const CloudType& c)
     IOField<scalar> nParticle
     (
         c.fieldIOobject("nParticle", IOobject::NO_READ),
-        np
-    );
-    IOField<scalar> deletedParticle
-    (
-        c.fieldIOobject("deletedParticle", IOobject::NO_READ),
         np
     );
     IOField<scalar> d(c.fieldIOobject("d", IOobject::NO_READ), np);
@@ -200,12 +188,11 @@ void Foam::KinematicParcel<ParcelType>::writeFields(const CloudType& c)
 
     forAllConstIter(typename CloudType, c, iter)
     {
-        const KinematicParcel<ParcelType>& p = iter();
+        const KinematicVOFParcel<ParcelType>& p = iter();
 
         active[i] = p.active();
         typeId[i] = p.typeId();
         nParticle[i] = p.nParticle();
-        deletedParticle[i] = p.deletedParticle();
         d[i] = p.d();
         dTarget[i] = p.dTarget();
         U[i] = p.U();
@@ -220,7 +207,6 @@ void Foam::KinematicParcel<ParcelType>::writeFields(const CloudType& c)
     active.write();
     typeId.write();
     nParticle.write();
-    deletedParticle.write();
     d.write();
     dTarget.write();
     U.write();
@@ -237,7 +223,7 @@ template<class ParcelType>
 Foam::Ostream& Foam::operator<<
 (
     Ostream& os,
-    const KinematicParcel<ParcelType>& p
+    const KinematicVOFParcel<ParcelType>& p
 )
 {
     if (os.format() == IOstream::ASCII)
@@ -246,7 +232,6 @@ Foam::Ostream& Foam::operator<<
             << token::SPACE << p.active()
             << token::SPACE << p.typeId()
             << token::SPACE << p.nParticle()
-            << token::SPACE << p.deletedParticle()
             << token::SPACE << p.d()
             << token::SPACE << p.dTarget()
             << token::SPACE << p.U()
@@ -261,14 +246,14 @@ Foam::Ostream& Foam::operator<<
         os.write
         (
             reinterpret_cast<const char*>(&p.active_),
-            KinematicParcel<ParcelType>::sizeofFields_
+            KinematicVOFParcel<ParcelType>::sizeofFields_
         );
     }
 
     // Check state of Ostream
     os.check
     (
-        "Ostream& operator<<(Ostream&, const KinematicParcel<ParcelType>&)"
+        "Ostream& operator<<(Ostream&, const KinematicVOFParcel<ParcelType>&)"
     );
 
     return os;

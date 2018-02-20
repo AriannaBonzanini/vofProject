@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::KinematicParcel
+    Foam::KinematicVOFParcel
 
 Description
     Kinematic parcel class with rotational motion (as spherical
@@ -35,14 +35,14 @@ Description
     - wall interactions
 
 SourceFiles
-    KinematicParcelI.H
-    KinematicParcel.C
-    KinematicParcelIO.C
+    KinematicVOFParcelI.H
+    KinematicVOFParcel.C
+    KinematicVOFParcelIO.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef KinematicParcel_H
-#define KinematicParcel_H
+#ifndef KinematicVOFParcel_H
+#define KinematicVOFParcel_H
 
 #include "particle.H"
 #include "IOstream.H"
@@ -58,7 +58,7 @@ namespace Foam
 {
 
 template<class ParcelType>
-class KinematicParcel;
+class KinematicVOFParcel;
 
 // Forward declaration of friend functions
 
@@ -66,15 +66,15 @@ template<class ParcelType>
 Ostream& operator<<
 (
     Ostream&,
-    const KinematicParcel<ParcelType>&
+    const KinematicVOFParcel<ParcelType>&
 );
 
 /*---------------------------------------------------------------------------*\
-                         Class KinematicParcel Declaration
+                         Class KinematicVOFParcel Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class ParcelType>
-class KinematicParcel
+class KinematicVOFParcel
 :
     public ParcelType
 {
@@ -242,9 +242,6 @@ protected:
             //- Number of particles in Parcel
             scalar nParticle_;
 
-            //- Number of deleted particles in Parcel
-            scalar deletedParticle_;
-
             //- Diameter [m]
             scalar d_;
 
@@ -302,7 +299,7 @@ public:
     // Static data members
 
         //- Runtime type information
-        TypeName("KinematicParcel");
+        TypeName("KinematicVOFParcel");
 
         //- String representation of properties
         AddToPropertyList
@@ -311,7 +308,6 @@ public:
             " active"
           + " typeId"
           + " nParticle"
-          + " deletedParticle"
           + " d"
           + " dTarget "
           + " (Ux Uy Uz)"
@@ -326,7 +322,7 @@ public:
 
         //- Construct from owner, position, and cloud owner
         //  Other properties initialised as null
-        inline KinematicParcel
+        inline KinematicVOFParcel
         (
             const polyMesh& mesh,
             const vector& position,
@@ -336,7 +332,7 @@ public:
         );
 
         //- Construct from components
-        inline KinematicParcel
+        inline KinematicVOFParcel
         (
             const polyMesh& mesh,
             const vector& position,
@@ -345,7 +341,6 @@ public:
             const label tetPtI,
             const label typeId,
             const scalar nParticle0,
-            const scalar deletedParticle0,
             const scalar d0,
             const scalar dTarget0,
             const vector& torque0,
@@ -353,7 +348,7 @@ public:
         );
 
         //- Construct from Istream
-        KinematicParcel
+        KinematicVOFParcel
         (
             const polyMesh& mesh,
             Istream& is,
@@ -361,21 +356,21 @@ public:
         );
 
         //- Construct as a copy
-        KinematicParcel(const KinematicParcel& p);
+        KinematicVOFParcel(const KinematicVOFParcel& p);
 
         //- Construct as a copy
-        KinematicParcel(const KinematicParcel& p, const polyMesh& mesh);
+        KinematicVOFParcel(const KinematicVOFParcel& p, const polyMesh& mesh);
 
         //- Construct and return a (basic particle) clone
         virtual autoPtr<particle> clone() const
         {
-            return autoPtr<particle>(new KinematicParcel(*this));
+            return autoPtr<particle>(new KinematicVOFParcel(*this));
         }
 
         //- Construct and return a (basic particle) clone
         virtual autoPtr<particle> clone(const polyMesh& mesh) const
         {
-            return autoPtr<particle>(new KinematicParcel(*this, mesh));
+            return autoPtr<particle>(new KinematicVOFParcel(*this, mesh));
         }
 
         //- Factory class to read-construct particles used for
@@ -391,11 +386,11 @@ public:
                 mesh_(mesh)
             {}
 
-            autoPtr<KinematicParcel<ParcelType>> operator()(Istream& is) const
+            autoPtr<KinematicVOFParcel<ParcelType>> operator()(Istream& is) const
             {
-                return autoPtr<KinematicParcel<ParcelType>>
+                return autoPtr<KinematicVOFParcel<ParcelType>>
                 (
-                    new KinematicParcel<ParcelType>(mesh_, is, true)
+                    new KinematicVOFParcel<ParcelType>(mesh_, is, true)
                 );
             }
         };
@@ -413,9 +408,6 @@ public:
 
             //- Return const access to number of particles
             inline scalar nParticle() const;
-
-            //- Return const access to number of deleted particles
-            inline scalar deletedParticle() const;
 
             //- Return const access to diameter
             inline scalar d() const;
@@ -458,9 +450,6 @@ public:
 
             //- Return access to number of particles
             inline scalar& nParticle();
-
-            //- Return access to number of deleted particles
-            inline scalar& deletedParticle();
 
             //- Return access to diameter
             inline scalar& d();
@@ -657,7 +646,7 @@ public:
         friend Ostream& operator<< <ParcelType>
         (
             Ostream&,
-            const KinematicParcel<ParcelType>&
+            const KinematicVOFParcel<ParcelType>&
         );
 };
 
@@ -668,13 +657,13 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "KinematicParcelI.H"
-#include "KinematicParcelTrackingDataI.H"
+#include "KinematicVOFParcelI.H"
+#include "KinematicVOFParcelTrackingDataI.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository
-    #include "KinematicParcel.C"
+    #include "KinematicVOFParcel.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

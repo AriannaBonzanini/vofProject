@@ -101,6 +101,10 @@ public:
                 //  Note: for particles belonging to this cloud only
                 virtual const tmp<volScalarField> theta() const = 0;
 
+                //- Return the removed particle volume fraction field
+                //  Note: for particles belonging to this cloud only
+                virtual const tmp<volScalarField> thetaDelete() const = 0;
+
                 //- Return the particle mass fraction field
                 //  Note: for particles belonging to this cloud only
                 virtual const tmp<volScalarField> alpha() const = 0;

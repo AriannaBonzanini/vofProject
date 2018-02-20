@@ -1,1 +1,0 @@
-../submodels/Kinematic/CollisionModel/NoCollision/NoCollision.H

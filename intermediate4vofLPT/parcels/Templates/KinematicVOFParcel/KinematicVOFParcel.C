@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "KinematicParcel.H"
+#include "KinematicVOFParcel.H"
 #include "forceSuSp.H"
 #include "IntegrationScheme.H"
 #include "meshTools.H"
@@ -31,14 +31,14 @@ License
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
 template<class ParcelType>
-Foam::label Foam::KinematicParcel<ParcelType>::maxTrackAttempts = 1;
+Foam::label Foam::KinematicVOFParcel<ParcelType>::maxTrackAttempts = 1;
 
 
 // * * * * * * * * * * *  Protected Member Functions * * * * * * * * * * * * //
 
 template<class ParcelType>
 template<class TrackData>
-void Foam::KinematicParcel<ParcelType>::setCellValues
+void Foam::KinematicVOFParcel<ParcelType>::setCellValues
 (
     TrackData& td,
     const scalar dt,
@@ -80,7 +80,7 @@ void Foam::KinematicParcel<ParcelType>::setCellValues
 
 template<class ParcelType>
 template<class TrackData>
-void Foam::KinematicParcel<ParcelType>::cellValueSourceCorrection
+void Foam::KinematicVOFParcel<ParcelType>::cellValueSourceCorrection
 (
     TrackData& td,
     const scalar dt,
@@ -93,7 +93,7 @@ void Foam::KinematicParcel<ParcelType>::cellValueSourceCorrection
 
 template<class ParcelType>
 template<class TrackData>
-void Foam::KinematicParcel<ParcelType>::calc
+void Foam::KinematicVOFParcel<ParcelType>::calc
 (
     TrackData& td,
     const scalar dt,
@@ -144,7 +144,7 @@ void Foam::KinematicParcel<ParcelType>::calc
 
 template<class ParcelType>
 template<class TrackData>
-const Foam::vector Foam::KinematicParcel<ParcelType>::calcVelocity
+const Foam::vector Foam::KinematicVOFParcel<ParcelType>::calcVelocity
 (
     TrackData& td,
     const scalar dt,
@@ -200,16 +200,15 @@ const Foam::vector Foam::KinematicParcel<ParcelType>::calcVelocity
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class ParcelType>
-Foam::KinematicParcel<ParcelType>::KinematicParcel
+Foam::KinematicVOFParcel<ParcelType>::KinematicVOFParcel
 (
-    const KinematicParcel<ParcelType>& p
+    const KinematicVOFParcel<ParcelType>& p
 )
 :
     ParcelType(p),
     active_(p.active_),
     typeId_(p.typeId_),
     nParticle_(p.nParticle_),
-    deletedParticle_(p.deletedParticle_),
     d_(p.d_),
     dTarget_(p.dTarget_),
     U_(p.U_),
@@ -224,9 +223,9 @@ Foam::KinematicParcel<ParcelType>::KinematicParcel
 
 
 template<class ParcelType>
-Foam::KinematicParcel<ParcelType>::KinematicParcel
+Foam::KinematicVOFParcel<ParcelType>::KinematicVOFParcel
 (
-    const KinematicParcel<ParcelType>& p,
+    const KinematicVOFParcel<ParcelType>& p,
     const polyMesh& mesh
 )
 :
@@ -234,7 +233,6 @@ Foam::KinematicParcel<ParcelType>::KinematicParcel
     active_(p.active_),
     typeId_(p.typeId_),
     nParticle_(p.nParticle_),
-    deletedParticle_(p.deletedParticle_),
     d_(p.d_),
     dTarget_(p.dTarget_),
     U_(p.U_),
@@ -252,7 +250,7 @@ Foam::KinematicParcel<ParcelType>::KinematicParcel
 
 template<class ParcelType>
 template<class TrackData>
-bool Foam::KinematicParcel<ParcelType>::move
+bool Foam::KinematicVOFParcel<ParcelType>::move
 (
     TrackData& td,
     const scalar trackTime
@@ -275,6 +273,17 @@ bool Foam::KinematicParcel<ParcelType>::move
     {
         dtMax *= maxCo;
     }
+
+        const point start(p.position());
+
+        // Set the Lagrangian time-step
+        scalar dt = min(dtMax, tEnd);
+
+        // Cache the parcel current cell as this will change if a face is hit
+        const label celli = p.cell();
+
+        td.cloud().functions().preEvolveParticleRemoval(p, celli, dt, start, td.keepParticle);
+
 
     bool tracking = true;
     label nTrackingStalled = 0;
@@ -357,13 +366,10 @@ bool Foam::KinematicParcel<ParcelType>::move
             }
         }
 
-        p.age() += dt;
-
-        label preRemovalSize = p.nParticle();
+        p.age() += dt;       
 
         td.cloud().functions().postMove(p, celli, dt, start, td.keepParticle);
 
-        p.deletedParticle() = preRemovalSize - p.nParticle();
     }
 
     return td.keepParticle;
@@ -372,7 +378,7 @@ bool Foam::KinematicParcel<ParcelType>::move
 
 template<class ParcelType>
 template<class TrackData>
-void Foam::KinematicParcel<ParcelType>::hitFace(TrackData& td)
+void Foam::KinematicVOFParcel<ParcelType>::hitFace(TrackData& td)
 {
     typename TrackData::cloudType::parcelType& p =
         static_cast<typename TrackData::cloudType::parcelType&>(*this);
@@ -382,13 +388,13 @@ void Foam::KinematicParcel<ParcelType>::hitFace(TrackData& td)
 
 
 template<class ParcelType>
-void Foam::KinematicParcel<ParcelType>::hitFace(int& td)
+void Foam::KinematicVOFParcel<ParcelType>::hitFace(int& td)
 {}
 
 
 template<class ParcelType>
 template<class TrackData>
-bool Foam::KinematicParcel<ParcelType>::hitPatch
+bool Foam::KinematicVOFParcel<ParcelType>::hitPatch
 (
     const polyPatch& pp,
     TrackData& td,
@@ -433,7 +439,7 @@ bool Foam::KinematicParcel<ParcelType>::hitPatch
 
 template<class ParcelType>
 template<class TrackData>
-void Foam::KinematicParcel<ParcelType>::hitProcessorPatch
+void Foam::KinematicVOFParcel<ParcelType>::hitProcessorPatch
 (
     const processorPolyPatch&,
     TrackData& td
@@ -445,7 +451,7 @@ void Foam::KinematicParcel<ParcelType>::hitProcessorPatch
 
 template<class ParcelType>
 template<class TrackData>
-void Foam::KinematicParcel<ParcelType>::hitWallPatch
+void Foam::KinematicVOFParcel<ParcelType>::hitWallPatch
 (
     const wallPolyPatch& wpp,
     TrackData& td,
@@ -458,7 +464,7 @@ void Foam::KinematicParcel<ParcelType>::hitWallPatch
 
 template<class ParcelType>
 template<class TrackData>
-void Foam::KinematicParcel<ParcelType>::hitPatch
+void Foam::KinematicVOFParcel<ParcelType>::hitPatch
 (
     const polyPatch&,
     TrackData& td
@@ -469,7 +475,7 @@ void Foam::KinematicParcel<ParcelType>::hitPatch
 
 
 template<class ParcelType>
-void Foam::KinematicParcel<ParcelType>::transformProperties(const tensor& T)
+void Foam::KinematicVOFParcel<ParcelType>::transformProperties(const tensor& T)
 {
     ParcelType::transformProperties(T);
 
@@ -478,7 +484,7 @@ void Foam::KinematicParcel<ParcelType>::transformProperties(const tensor& T)
 
 
 template<class ParcelType>
-void Foam::KinematicParcel<ParcelType>::transformProperties
+void Foam::KinematicVOFParcel<ParcelType>::transformProperties
 (
     const vector& separation
 )
@@ -488,7 +494,7 @@ void Foam::KinematicParcel<ParcelType>::transformProperties
 
 
 template<class ParcelType>
-Foam::scalar Foam::KinematicParcel<ParcelType>::wallImpactDistance
+Foam::scalar Foam::KinematicVOFParcel<ParcelType>::wallImpactDistance
 (
     const vector&
 ) const
@@ -499,6 +505,6 @@ Foam::scalar Foam::KinematicParcel<ParcelType>::wallImpactDistance
 
 // * * * * * * * * * * * * * * IOStream operators  * * * * * * * * * * * * * //
 
-#include "KinematicParcelIO.C"
+#include "KinematicVOFParcelIO.C"
 
 // ************************************************************************* //

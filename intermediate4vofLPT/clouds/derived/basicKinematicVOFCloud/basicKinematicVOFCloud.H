@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -21,31 +21,30 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
+Class
+    Foam::basicKinematicCloud
+
+Description
+    Cloud class to introduce kinematic parcels
+
 \*---------------------------------------------------------------------------*/
-#include "basicKinematicCloud.H"
 
-#include "makeParcelCloudFunctionObjects.H"
+#ifndef basicKinematicVOFCloud_H
+#define basicKinematicVOFCloud_H
 
-// Kinematic
-#include "makeParcelForces.H"
-#include "makeParcelDispersionModels.H"
-#include "makeParcelInjectionModels.H"
-#include "makeParcelPatchInteractionModels.H"
-#include "makeParcelStochasticCollisionModels.H"
-#include "makeParcelSurfaceFilmModels.H"
+#include "Cloud.H"
+#include "KinematicVOFCloud.H"
+#include "basicKinematicVOFParcel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-makeParcelCloudFunctionObjects(basicKinematicCloud);
+namespace Foam
+{
+    typedef KinematicVOFCloud<Cloud<basicKinematicVOFParcel>> basicKinematicVOFCloud;
+}
 
-// Kinematic sub-models
-makeParcelForces(basicKinematicCloud);
-makeParcelDispersionModels(basicKinematicCloud);
-makeParcelInjectionModels(basicKinematicCloud);
-makeParcelPatchInteractionModels(basicKinematicCloud);
-makeParcelStochasticCollisionModels(basicKinematicCloud);
-makeParcelSurfaceFilmModels(basicKinematicCloud);
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-
+#endif
 
 // ************************************************************************* //

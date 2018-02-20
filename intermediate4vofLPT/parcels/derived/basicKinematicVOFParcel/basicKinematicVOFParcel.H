@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -21,31 +21,39 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
+Class
+    Foam::basicKinematicParcel
+
+Description
+    Definition of basic kinematic parcel
+
+SourceFiles
+    basicKinematicVOFParcel.H
+
 \*---------------------------------------------------------------------------*/
-#include "basicKinematicCloud.H"
 
-#include "makeParcelCloudFunctionObjects.H"
+#ifndef basicKinematicVOFParcel_H
+#define basicKinematicVOFParcel_H
 
-// Kinematic
-#include "makeParcelForces.H"
-#include "makeParcelDispersionModels.H"
-#include "makeParcelInjectionModels.H"
-#include "makeParcelPatchInteractionModels.H"
-#include "makeParcelStochasticCollisionModels.H"
-#include "makeParcelSurfaceFilmModels.H"
+#include "contiguous.H"
+#include "particle.H"
+#include "KinematicVOFParcel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-makeParcelCloudFunctionObjects(basicKinematicCloud);
+namespace Foam
+{
+    typedef KinematicVOFParcel<particle> basicKinematicVOFParcel;
 
-// Kinematic sub-models
-makeParcelForces(basicKinematicCloud);
-makeParcelDispersionModels(basicKinematicCloud);
-makeParcelInjectionModels(basicKinematicCloud);
-makeParcelPatchInteractionModels(basicKinematicCloud);
-makeParcelStochasticCollisionModels(basicKinematicCloud);
-makeParcelSurfaceFilmModels(basicKinematicCloud);
+    template<>
+    inline bool contiguous<basicKinematicVOFParcel>()
+    {
+        return true;
+    }
+}
 
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+#endif
 
 // ************************************************************************* //

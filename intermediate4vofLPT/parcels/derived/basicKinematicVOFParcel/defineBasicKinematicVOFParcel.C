@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2015 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -22,30 +22,17 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 \*---------------------------------------------------------------------------*/
-#include "basicKinematicCloud.H"
 
-#include "makeParcelCloudFunctionObjects.H"
-
-// Kinematic
-#include "makeParcelForces.H"
-#include "makeParcelDispersionModels.H"
-#include "makeParcelInjectionModels.H"
-#include "makeParcelPatchInteractionModels.H"
-#include "makeParcelStochasticCollisionModels.H"
-#include "makeParcelSurfaceFilmModels.H"
+#include "basicKinematicVOFParcel.H"
+#include "Cloud.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-makeParcelCloudFunctionObjects(basicKinematicCloud);
-
-// Kinematic sub-models
-makeParcelForces(basicKinematicCloud);
-makeParcelDispersionModels(basicKinematicCloud);
-makeParcelInjectionModels(basicKinematicCloud);
-makeParcelPatchInteractionModels(basicKinematicCloud);
-makeParcelStochasticCollisionModels(basicKinematicCloud);
-makeParcelSurfaceFilmModels(basicKinematicCloud);
-
+namespace Foam
+{
+    defineTemplateTypeNameAndDebug(basicKinematicVOFParcel, 0);
+    defineTemplateTypeNameAndDebug(Cloud<basicKinematicVOFParcel>, 0);
+}
 
 
 // ************************************************************************* //

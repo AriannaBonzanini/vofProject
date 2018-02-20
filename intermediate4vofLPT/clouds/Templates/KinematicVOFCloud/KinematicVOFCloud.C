@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "KinematicCloud.H"
+#include "KinematicVOFCloud.H"
 #include "IntegrationScheme.H"
 #include "interpolation.H"
 #include "subCycleTime.H"
@@ -37,11 +37,11 @@ License
 // * * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * //
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::setModels()
+void Foam::KinematicVOFCloud<CloudType>::setModels()
 {
     dispersionModel_.reset
     (
-        DispersionModel<KinematicCloud<CloudType>>::New
+        DispersionModel<KinematicVOFCloud<CloudType>>::New
         (
             subModelProperties_,
             *this
@@ -50,7 +50,7 @@ void Foam::KinematicCloud<CloudType>::setModels()
 
     patchInteractionModel_.reset
     (
-        PatchInteractionModel<KinematicCloud<CloudType>>::New
+        PatchInteractionModel<KinematicVOFCloud<CloudType>>::New
         (
             subModelProperties_,
             *this
@@ -59,7 +59,7 @@ void Foam::KinematicCloud<CloudType>::setModels()
 
     stochasticCollisionModel_.reset
     (
-        StochasticCollisionModel<KinematicCloud<CloudType>>::New
+        StochasticCollisionModel<KinematicVOFCloud<CloudType>>::New
         (
             subModelProperties_,
             *this
@@ -68,7 +68,7 @@ void Foam::KinematicCloud<CloudType>::setModels()
 
     surfaceFilmModel_.reset
     (
-        SurfaceFilmModel<KinematicCloud<CloudType>>::New
+        SurfaceFilmModel<KinematicVOFCloud<CloudType>>::New
         (
             subModelProperties_,
             *this
@@ -88,7 +88,7 @@ void Foam::KinematicCloud<CloudType>::setModels()
 
 template<class CloudType>
 template<class TrackData>
-void Foam::KinematicCloud<CloudType>::solve(TrackData& td)
+void Foam::KinematicVOFCloud<CloudType>::solve(TrackData& td)
 {
     if (solution_.steadyState())
     {
@@ -127,7 +127,7 @@ void Foam::KinematicCloud<CloudType>::solve(TrackData& td)
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::buildCellOccupancy()
+void Foam::KinematicVOFCloud<CloudType>::buildCellOccupancy()
 {
     if (cellOccupancyPtr_.empty())
     {
@@ -151,7 +151,7 @@ void Foam::KinematicCloud<CloudType>::buildCellOccupancy()
         cellOccupancy[cO].clear();
     }
 
-    forAllIter(typename KinematicCloud<CloudType>, *this, iter)
+    forAllIter(typename KinematicVOFCloud<CloudType>, *this, iter)
     {
         cellOccupancy[iter().cell()].append(&iter());
     }
@@ -159,7 +159,7 @@ void Foam::KinematicCloud<CloudType>::buildCellOccupancy()
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::updateCellOccupancy()
+void Foam::KinematicVOFCloud<CloudType>::updateCellOccupancy()
 {
     // Only build the cellOccupancy if the pointer is set, i.e. it has
     // been requested before.
@@ -173,7 +173,7 @@ void Foam::KinematicCloud<CloudType>::updateCellOccupancy()
 
 template<class CloudType>
 template<class TrackData>
-void Foam::KinematicCloud<CloudType>::evolveCloud(TrackData& td)
+void Foam::KinematicVOFCloud<CloudType>::evolveCloud(TrackData& td)
 {
     if (solution_.coupled())
     {
@@ -216,7 +216,7 @@ void Foam::KinematicCloud<CloudType>::evolveCloud(TrackData& td)
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::postEvolve()
+void Foam::KinematicVOFCloud<CloudType>::postEvolve()
 {
     Info<< endl;
 
@@ -246,7 +246,7 @@ void Foam::KinematicCloud<CloudType>::postEvolve()
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::cloudReset(KinematicCloud<CloudType>& c)
+void Foam::KinematicVOFCloud<CloudType>::cloudReset(KinematicVOFCloud<CloudType>& c)
 {
     CloudType::cloudReset(c);
 
@@ -270,7 +270,7 @@ void Foam::KinematicCloud<CloudType>::cloudReset(KinematicCloud<CloudType>& c)
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class CloudType>
-Foam::KinematicCloud<CloudType>::KinematicCloud
+Foam::KinematicVOFCloud<CloudType>::KinematicVOFCloud
 (
     const word& cloudName,
     const volScalarField& rho,
@@ -405,9 +405,9 @@ Foam::KinematicCloud<CloudType>::KinematicCloud
 
 
 template<class CloudType>
-Foam::KinematicCloud<CloudType>::KinematicCloud
+Foam::KinematicVOFCloud<CloudType>::KinematicVOFCloud
 (
-    KinematicCloud<CloudType>& c,
+    KinematicVOFCloud<CloudType>& c,
     const word& name
 )
 :
@@ -472,11 +472,11 @@ Foam::KinematicCloud<CloudType>::KinematicCloud
 
 
 template<class CloudType>
-Foam::KinematicCloud<CloudType>::KinematicCloud
+Foam::KinematicVOFCloud<CloudType>::KinematicVOFCloud
 (
     const fvMesh& mesh,
     const word& name,
-    const KinematicCloud<CloudType>& c
+    const KinematicVOFCloud<CloudType>& c
 )
 :
     CloudType(mesh, name, IDLList<parcelType>()),
@@ -535,21 +535,21 @@ Foam::KinematicCloud<CloudType>::KinematicCloud
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
 template<class CloudType>
-Foam::KinematicCloud<CloudType>::~KinematicCloud()
+Foam::KinematicVOFCloud<CloudType>::~KinematicVOFCloud()
 {}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class CloudType>
-bool Foam::KinematicCloud<CloudType>::hasWallImpactDistance() const
+bool Foam::KinematicVOFCloud<CloudType>::hasWallImpactDistance() const
 {
     return true;
 }
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::setParcelThermoProperties
+void Foam::KinematicVOFCloud<CloudType>::setParcelThermoProperties
 (
     parcelType& parcel,
     const scalar lagrangianDt
@@ -560,7 +560,7 @@ void Foam::KinematicCloud<CloudType>::setParcelThermoProperties
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::checkParcelProperties
+void Foam::KinematicVOFCloud<CloudType>::checkParcelProperties
 (
     parcelType& parcel,
     const scalar lagrangianDt,
@@ -578,11 +578,11 @@ void Foam::KinematicCloud<CloudType>::checkParcelProperties
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::storeState()
+void Foam::KinematicVOFCloud<CloudType>::storeState()
 {
     cloudCopyPtr_.reset
     (
-        static_cast<KinematicCloud<CloudType>*>
+        static_cast<KinematicVOFCloud<CloudType>*>
         (
             clone(this->name() + "Copy").ptr()
         )
@@ -591,7 +591,7 @@ void Foam::KinematicCloud<CloudType>::storeState()
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::restoreState()
+void Foam::KinematicVOFCloud<CloudType>::restoreState()
 {
     cloudReset(cloudCopyPtr_());
     cloudCopyPtr_.clear();
@@ -599,7 +599,7 @@ void Foam::KinematicCloud<CloudType>::restoreState()
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::resetSourceTerms()
+void Foam::KinematicVOFCloud<CloudType>::resetSourceTerms()
 {
     UTrans().field() = Zero;
     UCoeff().field() = 0.0;
@@ -608,7 +608,7 @@ void Foam::KinematicCloud<CloudType>::resetSourceTerms()
 
 template<class CloudType>
 template<class Type>
-void Foam::KinematicCloud<CloudType>::relax
+void Foam::KinematicVOFCloud<CloudType>::relax
 (
     DimensionedField<Type, volMesh>& field,
     const DimensionedField<Type, volMesh>& field0,
@@ -622,7 +622,7 @@ void Foam::KinematicCloud<CloudType>::relax
 
 template<class CloudType>
 template<class Type>
-void Foam::KinematicCloud<CloudType>::scale
+void Foam::KinematicVOFCloud<CloudType>::scale
 (
     DimensionedField<Type, volMesh>& field,
     const word& name
@@ -634,9 +634,9 @@ void Foam::KinematicCloud<CloudType>::scale
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::relaxSources
+void Foam::KinematicVOFCloud<CloudType>::relaxSources
 (
-    const KinematicCloud<CloudType>& cloudOldTime
+    const KinematicVOFCloud<CloudType>& cloudOldTime
 )
 {
     this->relax(UTrans_(), cloudOldTime.UTrans(), "U");
@@ -645,7 +645,7 @@ void Foam::KinematicCloud<CloudType>::relaxSources
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::scaleSources()
+void Foam::KinematicVOFCloud<CloudType>::scaleSources()
 {
     this->scale(UTrans_(), "U");
     this->scale(UCoeff_(), "U");
@@ -653,7 +653,7 @@ void Foam::KinematicCloud<CloudType>::scaleSources()
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::preEvolve()
+void Foam::KinematicVOFCloud<CloudType>::preEvolve()
 {
     // force calculaion of mesh dimensions - needed for parallel runs
     // with topology change due to lazy evaluation of valid mesh dimensions
@@ -673,12 +673,12 @@ void Foam::KinematicCloud<CloudType>::preEvolve()
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::evolve()
+void Foam::KinematicVOFCloud<CloudType>::evolve()
 {
     if (solution_.canEvolve())
     {
         typename parcelType::template
-            TrackingData<KinematicCloud<CloudType>> td(*this);
+            TrackingData<KinematicVOFCloud<CloudType>> td(*this);
 
         solve(td);
     }
@@ -687,7 +687,7 @@ void Foam::KinematicCloud<CloudType>::evolve()
 
 template<class CloudType>
 template<class TrackData>
-void Foam::KinematicCloud<CloudType>::motion(TrackData& td)
+void Foam::KinematicVOFCloud<CloudType>::motion(TrackData& td)
 {
     td.part() = TrackData::tpLinearTrack;
     CloudType::move(td,  solution_.trackTime());
@@ -697,7 +697,7 @@ void Foam::KinematicCloud<CloudType>::motion(TrackData& td)
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::patchData
+void Foam::KinematicVOFCloud<CloudType>::patchData
 (
     const parcelType& p,
     const polyPatch& pp,
@@ -843,7 +843,7 @@ void Foam::KinematicCloud<CloudType>::patchData
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::updateMesh()
+void Foam::KinematicVOFCloud<CloudType>::updateMesh()
 {
     updateCellOccupancy();
     injectors_.updateMesh();
@@ -852,9 +852,9 @@ void Foam::KinematicCloud<CloudType>::updateMesh()
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::autoMap(const mapPolyMesh& mapper)
+void Foam::KinematicVOFCloud<CloudType>::autoMap(const mapPolyMesh& mapper)
 {
-    typedef typename particle::TrackingData<KinematicCloud<CloudType>> tdType;
+    typedef typename particle::TrackingData<KinematicVOFCloud<CloudType>> tdType;
 
     tdType td(*this);
 
@@ -865,7 +865,7 @@ void Foam::KinematicCloud<CloudType>::autoMap(const mapPolyMesh& mapper)
 
 
 template<class CloudType>
-void Foam::KinematicCloud<CloudType>::info()
+void Foam::KinematicVOFCloud<CloudType>::info()
 {
     vector linearMomentum = linearMomentumOfSystem();
     reduce(linearMomentum, sumOp<vector>());

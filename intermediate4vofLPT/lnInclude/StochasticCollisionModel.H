@@ -1,1 +1,0 @@
-../submodels/Kinematic/StochasticCollision/StochasticCollisionModel/StochasticCollisionModel.H

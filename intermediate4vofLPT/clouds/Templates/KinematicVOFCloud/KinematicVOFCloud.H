@@ -22,7 +22,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::KinematicCloud
+    Foam::KinematicVOFCloud
 
 Description
     Templated base class for kinematic cloud
@@ -43,13 +43,13 @@ Description
       - surface film model
 
 SourceFiles
-    KinematicCloudI.H
-    KinematicCloud.C
+    KinematicVOFCloudI.H
+    KinematicVOFCloud.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef KinematicCloud_H
-#define KinematicCloud_H
+#ifndef KinematicVOFCloud_H
+#define KinematicVOFCloud_H
 
 #include "particle.H"
 #include "Cloud.H"
@@ -90,11 +90,11 @@ class StochasticCollisionModel;
 
 
 /*---------------------------------------------------------------------------*\
-                       Class KinematicCloud Declaration
+                       Class KinematicVOFCloud Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class CloudType>
-class KinematicCloud
+class KinematicVOFCloud
 :
     public CloudType,
     public kinematicCloud
@@ -110,13 +110,13 @@ public:
         typedef typename CloudType::particleType parcelType;
 
         //- Convenience typedef for this cloud type
-        typedef KinematicCloud<CloudType> kinematicCloudType;
+        typedef KinematicVOFCloud<CloudType> kinematicCloudType;
 
         //- Force models type
-        typedef ParticleForceList<KinematicCloud<CloudType>> forceType;
+        typedef ParticleForceList<KinematicVOFCloud<CloudType>> forceType;
 
         //- Function object type
-        typedef CloudFunctionObjectList<KinematicCloud<CloudType>>
+        typedef CloudFunctionObjectList<KinematicVOFCloud<CloudType>>
             functionType;
 
 
@@ -125,16 +125,16 @@ private:
     // Private data
 
         //- Cloud copy pointer
-        autoPtr<KinematicCloud<CloudType>> cloudCopyPtr_;
+        autoPtr<KinematicVOFCloud<CloudType>> cloudCopyPtr_;
 
 
     // Private Member Functions
 
         //- Disallow default bitwise copy construct
-        KinematicCloud(const KinematicCloud&);
+        KinematicVOFCloud(const KinematicVOFCloud&);
 
         //- Disallow default bitwise assignment
-        void operator=(const KinematicCloud&);
+        void operator=(const KinematicVOFCloud&);
 
 
 protected:
@@ -200,22 +200,22 @@ protected:
         // References to the cloud sub-models
 
             //- Injector models
-            InjectionModelList<KinematicCloud<CloudType>> injectors_;
+            InjectionModelList<KinematicVOFCloud<CloudType>> injectors_;
 
             //- Dispersion model
-            autoPtr<DispersionModel<KinematicCloud<CloudType>>>
+            autoPtr<DispersionModel<KinematicVOFCloud<CloudType>>>
                 dispersionModel_;
 
             //- Patch interaction model
-            autoPtr<PatchInteractionModel<KinematicCloud<CloudType>>>
+            autoPtr<PatchInteractionModel<KinematicVOFCloud<CloudType>>>
                 patchInteractionModel_;
 
             //- Stochastic collision model
-            autoPtr<StochasticCollisionModel<KinematicCloud<CloudType>>>
+            autoPtr<StochasticCollisionModel<KinematicVOFCloud<CloudType>>>
                 stochasticCollisionModel_;
 
             //- Surface film model
-            autoPtr<SurfaceFilmModel<KinematicCloud<CloudType>>>
+            autoPtr<SurfaceFilmModel<KinematicVOFCloud<CloudType>>>
                 surfaceFilmModel_;
 
 
@@ -261,7 +261,7 @@ protected:
             void postEvolve();
 
             //- Reset state of cloud
-            void cloudReset(KinematicCloud<CloudType>& c);
+            void cloudReset(KinematicVOFCloud<CloudType>& c);
 
 
 public:
@@ -269,7 +269,7 @@ public:
     // Constructors
 
         //- Construct given carrier gas fields
-        KinematicCloud
+        KinematicVOFCloud
         (
             const word& cloudName,
             const volScalarField& rho,
@@ -280,18 +280,18 @@ public:
         );
 
         //- Copy constructor with new name
-        KinematicCloud
+        KinematicVOFCloud
         (
-            KinematicCloud<CloudType>& c,
+            KinematicVOFCloud<CloudType>& c,
             const word& name
         );
 
         //- Copy constructor with new name - creates bare cloud
-        KinematicCloud
+        KinematicVOFCloud
         (
             const fvMesh& mesh,
             const word& name,
-            const KinematicCloud<CloudType>& c
+            const KinematicVOFCloud<CloudType>& c
         );
 
         //- Construct and return clone based on (this) with new name
@@ -299,7 +299,7 @@ public:
         {
             return autoPtr<Cloud<parcelType>>
             (
-                new KinematicCloud(*this, name)
+                new KinematicVOFCloud(*this, name)
             );
         }
 
@@ -308,13 +308,13 @@ public:
         {
             return autoPtr<Cloud<parcelType>>
             (
-                new KinematicCloud(this->mesh(), name, *this)
+                new KinematicVOFCloud(this->mesh(), name, *this)
             );
         }
 
 
     //- Destructor
-    virtual ~KinematicCloud();
+    virtual ~KinematicVOFCloud();
 
 
     // Member Functions
@@ -322,7 +322,7 @@ public:
         // Access
 
             //- Return a reference to the cloud copy
-            inline const KinematicCloud& cloudCopy() const;
+            inline const KinematicVOFCloud& cloudCopy() const;
 
             //- Switch to specify if particles of the cloud can return
             //  non-zero wall distance values - true for kinematic parcels
@@ -412,44 +412,44 @@ public:
             // Sub-models
 
                 //- Return const access to the injection model
-                inline const InjectionModelList<KinematicCloud<CloudType>>&
+                inline const InjectionModelList<KinematicVOFCloud<CloudType>>&
                     injectors() const;
 
                 //- Return reference to the injection model
-                inline InjectionModelList<KinematicCloud<CloudType>>&
+                inline InjectionModelList<KinematicVOFCloud<CloudType>>&
                     injectors();
 
                 //- Return const-access to the dispersion model
-                inline const DispersionModel<KinematicCloud<CloudType>>&
+                inline const DispersionModel<KinematicVOFCloud<CloudType>>&
                     dispersion() const;
 
                 //- Return reference to the dispersion model
-                inline DispersionModel<KinematicCloud<CloudType>>&
+                inline DispersionModel<KinematicVOFCloud<CloudType>>&
                     dispersion();
 
                 //- Return const-access to the patch interaction model
-                inline const PatchInteractionModel<KinematicCloud<CloudType>>&
+                inline const PatchInteractionModel<KinematicVOFCloud<CloudType>>&
                     patchInteraction() const;
 
                 //- Return reference to the patch interaction model
-                inline PatchInteractionModel<KinematicCloud<CloudType>>&
+                inline PatchInteractionModel<KinematicVOFCloud<CloudType>>&
                     patchInteraction();
 
                 //- Return const-access to the stochastic collision model
                 inline const
-                    StochasticCollisionModel<KinematicCloud<CloudType>>&
+                    StochasticCollisionModel<KinematicVOFCloud<CloudType>>&
                     stochasticCollision() const;
 
                 //- Return reference to the stochastic collision model
-                inline StochasticCollisionModel<KinematicCloud<CloudType>>&
+                inline StochasticCollisionModel<KinematicVOFCloud<CloudType>>&
                     stochasticCollision();
 
                 //- Return const-access to the surface film model
-                inline const SurfaceFilmModel<KinematicCloud<CloudType>>&
+                inline const SurfaceFilmModel<KinematicVOFCloud<CloudType>>&
                     surfaceFilm() const;
 
                 //- Return reference to the surface film model
-                inline SurfaceFilmModel<KinematicCloud<CloudType>>&
+                inline SurfaceFilmModel<KinematicVOFCloud<CloudType>>&
                     surfaceFilm();
 
 
@@ -571,13 +571,23 @@ public:
             ) const;
 
             //- Apply relaxation to (steady state) cloud sources
-            void relaxSources(const KinematicCloud<CloudType>& cloudOldTime);
+            void relaxSources(const KinematicVOFCloud<CloudType>& cloudOldTime);
 
             //- Apply scaling to (transient) cloud sources
             void scaleSources();
 
             //- Pre-evolve
             void preEvolve();
+
+            //- Pre-evolve
+            void preEvolveParticleRemoval
+			(    
+				parcelType& p,
+				const label celli,
+				const scalar dt,
+				const point& position0,
+				bool& keepParticle
+			);
 
             //- Evolve the cloud
             void evolve();
@@ -622,12 +632,12 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "KinematicCloudI.H"
+#include "KinematicVOFCloudI.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository
-    #include "KinematicCloud.C"
+    #include "KinematicVOFCloud.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

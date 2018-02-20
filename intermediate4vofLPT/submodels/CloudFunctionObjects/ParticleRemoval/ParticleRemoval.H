@@ -2,7 +2,7 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011-2016 OpenFOAM Foundation
+    \\  /    A nd           | Copyright (C) 2012-2016 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
@@ -22,22 +22,32 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::CloudFunctionObjectList
+    Foam::ParticleRemoval
 
 Description
-    List of cloud function objects
+    Remove particles when they escape the alpha phase fraction; for multi-phase cases.
+
+    Model is activated using:
+    \verbatim
+    particleRemoval1
+    {
+        type        particleRemoval;
+        alphaName   alpha;      // name volume fraction field
+        threshold   0.95;       // alpha value below which model is active
+    }
+    \endverbatim
+
 
 SourceFiles
-    CloudFunctionObjectListI.H
-    CloudFunctionObjectList.C
+    ParticleRemoval.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef CloudFunctionObjectList_H
-#define CloudFunctionObjectList_H
+#ifndef ParticleRemoval_H
+#define ParticleRemoval_H
 
-#include "PtrList.H"
 #include "CloudFunctionObject.H"
+#include "volFields.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -45,61 +55,69 @@ namespace Foam
 {
 
 /*---------------------------------------------------------------------------*\
-                   Class CloudFunctionObjectList Declaration
+                       Class ParticleRemoval Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class CloudType>
-class CloudFunctionObjectList
+class ParticleRemoval
 :
-    public PtrList<CloudFunctionObject<CloudType>>
+    public CloudFunctionObject<CloudType>
 {
-protected:
+    // Private Data
 
-    // Protected Data
+        // Typedefs
 
-        //- Reference to the owner cloud
-        const CloudType& owner_;
+            //- Convenience typedef for parcel type
+            typedef typename CloudType::parcelType parcelType;
 
-        //- Dictionary
-        const dictionary dict_;
+
+        //- Name of vol fraction field
+        const word alphaName_;
+
+        //- Pointer to the volume fraction field
+        const volScalarField* alphaPtr_;
+
+        //- Gradient of the volume fraction field
+    // COMMENTED    autoPtr<volVectorField> gradAlphaPtr_;
+
+        //- Threshold beyond which model is active
+        scalar threshold_;
 
 
 public:
 
+    //- Runtime type information
+    TypeName("particleRemoval");
+
+
     // Constructors
 
-        //- Null constructor
-        CloudFunctionObjectList(CloudType& owner);
-
-        //- Construct from mesh
-        CloudFunctionObjectList
+        //- Construct from dictionary
+        ParticleRemoval
         (
-            CloudType& owner,
             const dictionary& dict,
-            const bool readFields
+            CloudType& owner,
+            const word& modelName
         );
 
         //- Construct copy
-        CloudFunctionObjectList(const CloudFunctionObjectList& ppml);
+        ParticleRemoval(const ParticleRemoval<CloudType>& pe);
+
+        //- Construct and return a clone
+        virtual autoPtr<CloudFunctionObject<CloudType>> clone() const
+        {
+            return autoPtr<CloudFunctionObject<CloudType>>
+            (
+                new ParticleRemoval<CloudType>(*this)
+            );
+        }
 
 
     //- Destructor
-    virtual ~CloudFunctionObjectList();
+    virtual ~ParticleRemoval();
 
 
     // Member Functions
-
-        // Access
-
-            //- Return const access to the cloud owner
-            inline const CloudType& owner() const;
-
-            //- Return refernce to the cloud owner
-            inline CloudType& owner();
-
-            //- Return the forces dictionary
-            inline const dictionary& dict() const;
-
 
         // Evaluation
 
@@ -107,13 +125,13 @@ public:
             virtual void preEvolve();
 
             virtual void preEvolveParticleRemoval
-			(
+            (
                 typename CloudType::parcelType& p,
                 const label celli,
                 const scalar dt,
                 const point& position0,
                 bool& keepParticle
-			);
+            );
 
             //- Post-evolve hook
             virtual void postEvolve();
@@ -128,13 +146,14 @@ public:
                 bool& keepParticle
             );
 
+	    // ADDED LINES
             //- Post-patch hook
             virtual void postPatch
             (
                 const typename CloudType::parcelType& p,
                 const polyPatch& pp,
                 const scalar trackFraction,
-                const tetIndices& tetIs,
+                const tetIndices& testIs,
                 bool& keepParticle
             );
 
@@ -142,9 +161,10 @@ public:
             virtual void postFace
             (
                 const typename CloudType::parcelType& p,
-                const label facei,
+                const label faceI,
                 bool& keepParticle
             );
+            // END ADDED LINES	    
 };
 
 
@@ -154,10 +174,8 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "CloudFunctionObjectListI.H"
-
 #ifdef NoRepository
-    #include "CloudFunctionObjectList.C"
+    #include "ParticleRemoval.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

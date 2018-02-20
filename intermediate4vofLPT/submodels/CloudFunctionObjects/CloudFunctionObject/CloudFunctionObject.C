@@ -99,6 +99,19 @@ void Foam::CloudFunctionObject<CloudType>::preEvolve()
     // do nothing
 }
 
+template<class CloudType>
+void Foam::CloudFunctionObject<CloudType>::preEvolveParticleRemoval
+(
+    typename CloudType::parcelType&,
+    const label,
+    const scalar,
+    const point&,
+    bool&
+)
+{
+    // do nothing
+}
+
 
 template<class CloudType>
 void Foam::CloudFunctionObject<CloudType>::postEvolve()
