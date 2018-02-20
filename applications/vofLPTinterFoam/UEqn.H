@@ -7,6 +7,7 @@
       + turbulence->divDevRhoReff(rho, U)
      ==
         fvOptions(rho, U)
+	+ bubbleCloud.SU(U)
     );
 
     UEqn.relax();

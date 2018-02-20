@@ -68,6 +68,10 @@ surfaceScalarField rhoPhi
     fvc::interpolate(rho)*phi
 );
 
+// ADDED LINE FORSE NON SERVE
+// Construct interface from alpha1 distribution
+//interfaceProperties interface(U, phi, alpha1, mixture);
+
 
 // Construct incompressible turbulence model
 autoPtr<incompressible::turbulenceModel> turbulence
@@ -135,5 +139,38 @@ surfaceScalarField alphaPhi
 
 // MULES Correction
 tmp<surfaceScalarField> talphaPhiCorr0;
+
+// ADDED LINES
+// Dispersed volume fraction on mesh
+Info << "Creating field alphaD\n" << endl;
+volScalarField alphaD
+(
+    IOobject
+    (
+        "alphaD",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("0", dimless, 0)
+);
+
+// Dispersed velocity on mesh
+Info << "Creating field Ud\n" << endl;
+volVectorField Ud
+(
+    IOobject
+    (
+        "Ud",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedVector("0", dimVelocity, vector(0,0,0))
+);
 
 #include "createMRF.H"
